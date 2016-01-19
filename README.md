@@ -17,12 +17,12 @@ Within the VM created above [install Go](https://golang.org/doc/install) and [se
 #### Get the template code
 
 ```sh
-$ mkdir -p $GOPATH/src/github.com/mesosphere
-$ cd $GOPATH/src/github.com/mesosphere
-$ git clone git@github.com:mesosphere/mesos-framework.git
+$ mkdir -p $GOPATH/src/github.com/mehiar
+$ cd $GOPATH/src/github.com/mehiar
+$ git clone https://github.com/mehiar/mesos-framework.git
 $ go get ./...
 $ cd mesos-framework/
-$ git checkout -b tutorial origin/tutorial
+$ git checkout latest-branch
 ```
 
 At the point you should have all the tutorial code and be in the 'tutorial' branch.  This tutorial steps through commits on that branch adding framework functionality as we go.
@@ -31,16 +31,16 @@ At the point you should have all the tutorial code and be in the 'tutorial' bran
 At any point from here on, you should be able to compile and run the code.  Both the scheduler and the executor must be compiled as follows:
 
 ```sh
-$ cd $GOPATH/src/github.com/mesosphere/mesos-framework
+$ cd $GOPATH/src/github.com/mehiar/mesos-framework
 $ go build -o example_scheduler main.go
-$ cd $GOPATH/src/github.com/mesosphere/mesos-framework/executor
+$ cd $GOPATH/src/github.com/mehiar/mesos-framework/executor
 $ go build -o example_executor example_executor.go
 ```
 
 The example can then be run at any commit in the tutorial branch with:
 
 ```sh
-$ cd $GOPATH/src/github.com/mesosphere/mesos-framework
+$ cd $GOPATH/src/github.com/mehiar/mesos-framework
 $ ./example_scheduler --master=127.0.0.1:5050 --executor="/home/vagrant/code/go/src/github.com/mesosphere/mesos-framework/executor/example_executor" --logtostderr=true
 ```
 

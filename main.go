@@ -30,8 +30,8 @@ import (
 	mesos "github.com/mesos/mesos-go/mesosproto"
 	util "github.com/mesos/mesos-go/mesosutil"
 	sched "github.com/mesos/mesos-go/scheduler"
-	. "github.com/mesosphere/mesos-framework/scheduler"
-	. "github.com/mesosphere/mesos-framework/server"
+	. "github.com/mehiar/mesos-framework/scheduler"
+	. "github.com/mehiar/mesos-framework/server"
 )
 
 const (
