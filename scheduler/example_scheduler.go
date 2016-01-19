@@ -21,6 +21,9 @@ package scheduler
 import (
 	"github.com/gogo/protobuf/proto"
 	"strconv"
+	"math"
+	"fmt"
+	"sort"
 
 	log "github.com/golang/glog"
 	mesos "github.com/mesos/mesos-go/mesosproto"
@@ -62,11 +65,36 @@ func (sched *ExampleScheduler) Disconnected(sched.SchedulerDriver) {
 
 func (sched *ExampleScheduler) ResourceOffers(driver sched.SchedulerDriver, offers []*mesos.Offer) {
 	logOffers(offers)
+	var maxCpu float64 = 0
+	var maxMem float64 = 0
+	var resourceTable [][]float64
+	var metric []float64 
+	for _, offer := range offers{
+		remainingCpus := getOfferCpu(offer)
+		remainingMems := getOfferMem(offer)
+		temp :=[]float64{remainingCpus, remainingMems, 0}
+		resourceTable = append(resourceTable,temp)
+		maxCpu = math.Max(maxCpu,remainingCpus)
+		maxMem = math.Max(maxMem,remainingMems)
+	}
+
+	//Normalization
+	for itr:=0; itr<len(resourceTable); itr++{
+		resourceTable[itr][0] = resourceTable[itr][0] / maxCpu
+		resourceTable[itr][1] = resourceTable[itr][1] /maxMem
+		resourceTable[itr][2] = resourceTable[itr][0] * resourceTable[itr][1]
+		metric = append( metric, resourceTable[itr][2])
+		log.Infof("MEHIAR: %v, %v, %v \n",resourceTable[itr][0],resourceTable[itr][1],resourceTable[itr][2])
+	}
+
+	//Sorting
+	s := NewSlice(metric)
+	sort.Sort(s)
+	fmt.Println("MEHIAR: ", s.Float64Slice, s.idx)
 
 	for _, offer := range offers {
 		remainingCpus := getOfferCpu(offer)
 		remainingMems := getOfferMem(offer)
-
 		var tasks []*mesos.TaskInfo
 		for sched.cpuPerTask <= remainingCpus &&
 			sched.memPerTask <= remainingMems {
@@ -76,12 +104,21 @@ func (sched *ExampleScheduler) ResourceOffers(driver sched.SchedulerDriver, offe
 			taskId := &mesos.TaskID{
 				Value: proto.String(strconv.Itoa(sched.tasksLaunched)),
 			}
-
+			containerType := mesos.ContainerInfo_DOCKER
 			task := &mesos.TaskInfo{
 				Name:     proto.String("go-task-" + taskId.GetValue()),
 				TaskId:   taskId,
 				SlaveId:  offer.SlaveId,
-				Executor: sched.executor,
+//				Executor: sched.executor,
+				Container: &mesos.ContainerInfo {
+      					Type: &containerType,
+        				Docker: &mesos.ContainerInfo_DockerInfo {
+			            		Image: proto.String("ubuntu"),
+        				},
+    				},
+				Command: &mesos.CommandInfo {
+					Value: proto.String("sleep 1000000"),
+				},
 				Resources: []*mesos.Resource{
 					util.NewScalarResource("cpus", sched.cpuPerTask),
 					util.NewScalarResource("mem", sched.memPerTask),
