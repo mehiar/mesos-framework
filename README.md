@@ -1,4 +1,4 @@
-# mesos-framework-tutorial in Go
+# mesos-framework in Go
 
 ### 1) [Deploy a Mesos Cluster](https://github.com/mesosphere/playa-mesos)
 
@@ -19,9 +19,9 @@ Within the VM created above [install Go](https://golang.org/doc/install) and [se
 ```sh
 $ mkdir -p $GOPATH/src/github.com/mesosphere
 $ cd $GOPATH/src/github.com/mesosphere
-$ git clone git@github.com:mesosphere/mesos-framework-tutorial.git
+$ git clone git@github.com:mesosphere/mesos-framework.git
 $ go get ./...
-$ cd mesos-framework-tutorial/
+$ cd mesos-framework/
 $ git checkout -b tutorial origin/tutorial
 ```
 
@@ -31,17 +31,17 @@ At the point you should have all the tutorial code and be in the 'tutorial' bran
 At any point from here on, you should be able to compile and run the code.  Both the scheduler and the executor must be compiled as follows:
 
 ```sh
-$ cd $GOPATH/src/github.com/mesosphere/mesos-framework-tutorial
+$ cd $GOPATH/src/github.com/mesosphere/mesos-framework
 $ go build -o example_scheduler main.go
-$ cd $GOPATH/src/github.com/mesosphere/mesos-framework-tutorial/executor
+$ cd $GOPATH/src/github.com/mesosphere/mesos-framework/executor
 $ go build -o example_executor example_executor.go
 ```
 
 The example can then be run at any commit in the tutorial branch with:
 
 ```sh
-$ cd $GOPATH/src/github.com/mesosphere/mesos-framework-tutorial
-$ ./example_scheduler --master=127.0.0.1:5050 --executor="/home/vagrant/code/go/src/github.com/mesosphere/mesos-framework-tutorial/executor/example_executor" --logtostderr=true
+$ cd $GOPATH/src/github.com/mesosphere/mesos-framework
+$ ./example_scheduler --master=127.0.0.1:5050 --executor="/home/vagrant/code/go/src/github.com/mesosphere/mesos-framework/executor/example_executor" --logtostderr=true
 ```
 
 #### Framework template
@@ -54,7 +54,7 @@ The executor knows how to run the tasks that the schedulder launches.  A more de
 
 The file server is necessary in order to provide Mesos a location, from which it can retrieve the executor binary.  This third component is usually not explicitly called out as a requirement of a framework.  It is not technically a component of the framework but is a necessity for the end-to-end functioning of a framework.  Of course, multiple frameworks can share the same server.
 
-In the [first commit](https://github.com/mesosphere/mesos-framework-tutorial/commit/aae4f846a6dd7e5e0fba2d737dc82718ddde9e2b) the three components are in their respective directories.
+In the [first commit](https://github.com/mesosphere/mesos-framework/commit/aae4f846a6dd7e5e0fba2d737dc82718ddde9e2b) the three components are in their respective directories.
 
 'main.go' initializes the configuration of all three components and packages them into a configuration object.  This object is passed to the MesosSchedulerDriver, which is then started.
 
