@@ -20,9 +20,9 @@ Within the VM created above [install Go](https://golang.org/doc/install) and [se
 $ mkdir -p $GOPATH/src/github.com/mehiar
 $ cd $GOPATH/src/github.com/mehiar
 $ git clone https://github.com/mehiar/mesos-framework.git
+$ git checkout latest-branch
 $ go get ./...
 $ cd mesos-framework/
-$ git checkout latest-branch
 ```
 
 At the point you should have all the tutorial code and be in the 'tutorial' branch.  This tutorial steps through commits on that branch adding framework functionality as we go.
