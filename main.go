@@ -32,6 +32,7 @@ import (
 	sched "github.com/mesos/mesos-go/scheduler"
 	. "github.com/mehiar/mesos-framework/scheduler"
 	. "github.com/mehiar/mesos-framework/server"
+	. "github.com/mehiar/mesos-framework/restfull-api"
 )
 
 const (
@@ -54,6 +55,9 @@ func init() {
 }
 
 func main() {
+
+	// Start REST-API
+	go RunRestApi()
 
 	// Start HTTP server hosting executor binary
 	uri := ServeExecutorArtifact(*address, *artifactPort, *executorPath)
