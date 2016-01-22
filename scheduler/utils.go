@@ -33,16 +33,19 @@ func logOffers(offers []*mesos.Offer) {
 		log.Infof("Received Offer <%v> with cpus=%v mem=%v", offer.Id.GetValue(), getOfferCpu(offer), getOfferMem(offer))
 	}
 }
+
 // Sort Functions
 type Slice struct {
 	sort.Float64Slice
 	idx []int
 }
 
+
 func (s Slice) Swap(i, j int) {
 	s.Float64Slice.Swap(i, j)
 	s.idx[i], s.idx[j] = s.idx[j], s.idx[i]
 }
+
 
 func NewSlice(n []float64) *Slice {
 	s := &Slice{Float64Slice: sort.Float64Slice(n), idx: make([]int, len(n))}
@@ -51,4 +54,3 @@ func NewSlice(n []float64) *Slice {
 	}
 	return s
 }
-

@@ -66,6 +66,9 @@ func (sched *ExampleScheduler) Disconnected(sched.SchedulerDriver) {
 
 func (sched *ExampleScheduler) ResourceOffers(driver sched.SchedulerDriver, offers []*mesos.Offer) {
 	logOffers(offers)
+	//////////////////////////////////////////////////////////////////////////////////////
+	//				Ordering Offers
+	//////////////////////////////////////////////////////////////////////////////////////
 	var maxCpu float64 = 0
 	var maxMem float64 = 0
 	var resourceTable [][]float64
@@ -73,7 +76,7 @@ func (sched *ExampleScheduler) ResourceOffers(driver sched.SchedulerDriver, offe
 	for _, offer := range offers{
 		remainingCpus := getOfferCpu(offer)
 		remainingMems := getOfferMem(offer)
-		temp :=[]float64{remainingCpus, remainingMems, 0}
+		temp := []float64{remainingCpus, remainingMems, 0}
 		resourceTable = append(resourceTable,temp)
 		maxCpu = math.Max(maxCpu,remainingCpus)
 		maxMem = math.Max(maxMem,remainingMems)
@@ -92,10 +95,15 @@ func (sched *ExampleScheduler) ResourceOffers(driver sched.SchedulerDriver, offe
 	s := NewSlice(metric)
 	sort.Sort(s)
 	fmt.Println("MEHIAR: ", s.Float64Slice, s.idx)
-	submission_requests_ptr := RepoGetSubmissionRequests()
-	fmt.Println("MEHIAR: ", *submission_requests_ptr)
+	var sortedOffers []mesos.Offer
+	for itr:=0; itr<len(s.idx); itr++ {
+		sortedOffers = append(sortedOffers, *offers[s.idx[itr]])
+	}	
+
+	submissionRequestsPtr := RepoGetSubmissionRequests()
+	fmt.Println("MEHIAR: ", *submissionRequestsPtr)
 	
-	for _, offer := range offers {
+	for _, offer := range sortedOffers {
 		remainingCpus := getOfferCpu(offer)
 		remainingMems := getOfferMem(offer)
 		var tasks []*mesos.TaskInfo
