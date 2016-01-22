@@ -29,6 +29,7 @@ import (
 	mesos "github.com/mesos/mesos-go/mesosproto"
 	util "github.com/mesos/mesos-go/mesosutil"
 	sched "github.com/mesos/mesos-go/scheduler"
+	. "github.com/mehiar/mesos-framework/restfull-api"
 )
 
 type ExampleScheduler struct {
@@ -91,7 +92,9 @@ func (sched *ExampleScheduler) ResourceOffers(driver sched.SchedulerDriver, offe
 	s := NewSlice(metric)
 	sort.Sort(s)
 	fmt.Println("MEHIAR: ", s.Float64Slice, s.idx)
-
+	submission_requests_ptr := RepoGetSubmissionRequests()
+	fmt.Println("MEHIAR: ", *submission_requests_ptr)
+	
 	for _, offer := range offers {
 		remainingCpus := getOfferCpu(offer)
 		remainingMems := getOfferMem(offer)

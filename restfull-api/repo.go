@@ -5,6 +5,7 @@ import "fmt"
 var currentId int
 
 var containers ContainerRequests
+var submission_requests ContainerRequests
 
 func RepoFindRequest(id int) ContainerRequest {
 	for _, t := range containers {
@@ -21,6 +22,7 @@ func RepoCreateRequest(c ContainerRequest) ContainerRequest {
 	currentId += 1
 	c.Id = currentId
 	containers = append(containers, c)
+	submission_requests = append(submission_requests,c)
 	return c
 }
 
@@ -32,4 +34,8 @@ func RepoRemoveRequest(id int) error {
 		}
 	}
 	return fmt.Errorf("Could not find ContainerRequest with id of %d to delete", id)
+}
+
+func RepoGetSubmissionRequests() *ContainerRequests{
+	return &submission_requests
 }
