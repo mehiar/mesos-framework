@@ -52,7 +52,7 @@ func RequestShow(w http.ResponseWriter, r *http.Request) {
 /*
 Test with this curl command:
 
-curl -H "Content-Type: application/json" -d '{"name":"New ContainerRequest"}' http://localhost:8080/container-requests
+curl -H "Content-Type: application/json" -d '{"name":"New ContainerRequest"}' http://localhost:6060/container-requests
 
 */
 func RequestCreate(w http.ResponseWriter, r *http.Request) {
